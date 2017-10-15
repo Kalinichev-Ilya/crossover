@@ -6,6 +6,6 @@ class User < ApplicationRecord
   end
 
   def token
-    token = AuthenticateUser.call(email, password).result[0]
+    AuthenticateUser.call(email, password).result[0]
   end
 end
