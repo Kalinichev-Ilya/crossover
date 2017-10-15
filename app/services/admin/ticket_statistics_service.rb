@@ -7,7 +7,7 @@ module Admin
     end
 
     def call
-      tickets = Tickets.completed.where('date(updated_at) >= :from AND date(updated_at) <= :to', from: from, to: to)
+      tickets = Ticket.completed.where('date(updated_at) >= :from AND date(updated_at) <= :to', from: from, to: to)
       tickets = tickets.where(admin_id: user_id) if user_id
       tickets.reorder(admin_id: :desc, updated_at: :desc)
     end

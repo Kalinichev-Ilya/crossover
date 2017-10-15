@@ -3,7 +3,7 @@ class TicketStatisticsController < ApplicationController
 
   def index
     @user_emails = Admin.pluck(:email, :id).to_h
-    @card_orders = Ticket.where.not(admin_id: nil).where('updated_at > ?', 30.days.ago)
+    @tickets = Ticket.where.not(admin_id: nil).where('updated_at > ?', 30.days.ago)
   end
 
   def create
@@ -18,6 +18,6 @@ class TicketStatisticsController < ApplicationController
   private
 
   def check_authorization
-    authorize! :manage, AuthenticateUser
+    authorize! :manage, Admin
   end
 end
