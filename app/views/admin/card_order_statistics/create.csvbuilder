@@ -1,0 +1,15 @@
+csv << %w(id title status agent_id customer_id department_id priorety done_date body)
+
+@tickets.each do |ticket|
+  csv << ticket.attributes.values_at(
+     'title',
+     'status',
+     'agent_id',
+     'customer_id'.
+     'department_id',
+     'priorety',
+     'done_date',
+     'body'
+  )
+end
+

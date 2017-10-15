@@ -1,0 +1,43 @@
+%h3 Ticket statistics
+
+= form_for :statistics, url: tickets_statistics_path, method: :post, html: { class: 'form-inline' } do
+  .row
+    .form-group
+      .input-group.date{ data: { 'date-format' => 'DD.MM.YYYY' } }
+        %span.input-group-addon
+          %span.fa.fa-calendar
+        %input.form-control{ name: 'from', placeholder: 'From', value: params[:from] }
+
+    .form-group
+      .input-group.date{ data: { 'date-format' => 'DD.MM.YYYY' } }
+        %span.input-group-addon
+          %span.fa.fa-calendar
+        %input.form-control{ name: 'to', placeholder: 'To', value: params[:to] }
+
+    .form-group
+      .input-group.date
+        = select_tag :user_id, options_for_select(@user_emails), class: 'form-control'
+
+    .btn-group.pull-right
+      %button.btn.btn-orange{ type: 'submit' } Filter
+
+%table.table
+  %thead
+    %tr
+      %th{ rowspan: 2 } User
+      %th{ colspan: 7 } Cards count (completed/cancelled)
+    %tr
+      - 6.downto(0).each do |number|
+        - day = number.days.ago.to_date
+        %th{ class: day.wday.in?([6, 0]) ? 'info' : '' }= day
+  %tbody
+    - @card_orders.group_by(&:admin_user_id).each do |admin_user_id, user_card_orders|
+      %tr
+        %td= @user_emails.rassoc(admin_user_id)&.first
+        - 6.downto(0).each do |number|
+          - day = number.days.ago.to_date
+          %td{ class: day.wday.in?([6, 0]) ? 'info' : '' }
+            - orders = user_card_orders.select { |co| co.updated_at.to_date == day }
+            %span.green= orders.count(&:completed?)
+            \/
+            %span.red= orders.count(&:cancelled?)

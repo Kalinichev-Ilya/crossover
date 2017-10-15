@@ -1,9 +1,9 @@
-class ReportController < ApplicationController
+class TicketStatisticsController < ApplicationController
   before_action :check_authorization
 
   def index
     @user_emails = Admin.pluck(:email, :id).to_h
-    @card_orders = Tickets.where.not(admin_id: nil).where('updated_at > ?', 30.days.ago)
+    @card_orders = Ticket.where.not(admin_id: nil).where('updated_at > ?', 30.days.ago)
   end
 
   def create
