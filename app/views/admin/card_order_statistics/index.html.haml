@@ -25,19 +25,19 @@
   %thead
     %tr
       %th{ rowspan: 2 } User
-      %th{ colspan: 7 } Cards count (completed/cancelled)
+      %th{ colspan: 7 } Tickets count (completed/cancelled)
     %tr
       - 6.downto(0).each do |number|
         - day = number.days.ago.to_date
         %th{ class: day.wday.in?([6, 0]) ? 'info' : '' }= day
   %tbody
-    - @card_orders.group_by(&:admin_user_id).each do |admin_user_id, user_card_orders|
+    - @tickets.group_by(&:admin_id).each do |admin_id, user_tickets|
       %tr
-        %td= @user_emails.rassoc(admin_user_id)&.first
+        %td= @user_emails.rassoc(admin_id)&.first
         - 6.downto(0).each do |number|
           - day = number.days.ago.to_date
           %td{ class: day.wday.in?([6, 0]) ? 'info' : '' }
-            - orders = user_card_orders.select { |co| co.updated_at.to_date == day }
-            %span.green= orders.count(&:completed?)
+            - tickets = user_tickets.select { |co| co.updated_at.to_date == day }
+            %span.green= tickets.count(&:completed?)
             \/
-            %span.red= orders.count(&:cancelled?)
+            %span.red= tickets.count(&:cancelled?)
