@@ -18,6 +18,6 @@ class TicketStatisticsController < ApplicationController
   private
 
   def check_authorization
-    authorize! :manage, Admin.token
+    authorize! :manage, AuthenticateUser
   end
 end
